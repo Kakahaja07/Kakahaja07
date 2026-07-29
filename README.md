@@ -1,117 +1,180 @@
-# Hi, I'm Prashant Sharma 👋
+<div align="center">
 
-[![Portfolio Badge](https://img.shields.io/badge/Portfolio-Visit%20Site-blue?style=for-the-badge&logo=wordpress)](https://yourportfolio.com)
-[![LinkedIn Badge](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/prashantsharma)
-[![Email Badge](https://img.shields.io/badge/Email-Contact%20Me-red?style=for-the-badge&logo=gmail)](mailto:your.email@example.com)
+# Hi 👋 I'm Prashant Sharma
 
-## 🚀 AI Automation Engineer | Next.js Developer | SEO Systems Architect
+### AI Automation Engineer • Full Stack Developer • Open Source Maintainer
 
-I’m passionate about building **intelligent, scalable, and high-performance digital solutions**. My work sits at the intersection of **AI-driven automation, modern web development, and SEO-focused system architecture**.  
+Building developer tools, APIs, automation systems and scalable web applications.
 
-### 🔹 What I Do
-- **AI Automation Engineering** – I design smart workflows that streamline processes and improve efficiency.  
-- **Next.js Development** – I build fast, scalable applications with seamless user experiences.  
-- **SEO Systems Architecture** – I craft technical infrastructures that maximize visibility and digital growth.  
+<p>
+<a href="https://hiprashant.com">
+<img src="https://img.shields.io/badge/Portfolio-Website-0A66C2?style=for-the-badge">
+</a>
 
-### 🔹 My Approach
-I thrive on solving complex challenges by combining **cutting-edge technology with strategic optimization**. For me, it’s not just about writing code—it’s about creating solutions that deliver real business impact.  
+<a href="https://github.com/Kakahaja07">
+<img src="https://img.shields.io/github/followers/Kakahaja07?style=for-the-badge">
+</a>
 
-### 🔹 My Vision
-To create **scalable, intelligent, and user-centric digital ecosystems** that empower businesses to innovate and succeed in competitive landscapes.  
+<a href="mailto:your@email.com">
+<img src="https://img.shields.io/badge/Email-Contact-EA4335?style=for-the-badge">
+</a>
+
+</p>
+
+</div>
 
 ---
-📌 *Always exploring the synergy between automation, web frameworks, and search optimization to drive meaningful results.*
 
+## 🚀 About Me
 
-```javascript
-const skills = {
-  seo: ['On-Page Optimization', 'Keyword Research', 'Technical SEO', 'Link Building', 'Content Strategy'],
-  webDev: ['WordPress', 'HTML/CSS', 'PHP', 'Web Performance', 'Responsive Design'],
-  digitalMarketing: ['Facebook Ads', 'Social Media Marketing', 'Google Analytics', 'Content Marketing'],
-  tools: ['SEMrush', 'Ahrefs', 'Google Search Console', 'Screaming Frog', 'Moz']
-};
-```
+I'm a software engineer from India focused on building open-source tools that simplify complex APIs and automate repetitive workflows.
 
-## 🚀 Professional Experience
+My interests include:
 
-- **SEO Specialist** at MADS SOLUTIONS (Oct 2022 - Present)
-  *Self-employed | India*
-  
-- **SEO Consultant** at GeekWorld (Jan 2016 - Dec 2024)
-  *9 years of experience in search engine optimization*
+- 🤖 AI Automation
+- ⚡ Next.js & React
+- 📦 TypeScript SDK Development
+- 🌎 Government & Open Data APIs
+- ☁️ Cloudflare Workers
+- 🗄️ Supabase
+- 🔍 Technical SEO
+- 🚀 Developer Experience (DX)
 
-## 📊 What I Offer
+I enjoy creating tools that developers can install with a single command and use immediately.
 
-<table>
-  <tr>
-    <td width="50%">
-      <h3 align="center">SEO Strategy</h3>
-      <p align="center">
-        <img src="https://via.placeholder.com/400x200" alt="SEO Strategy" width="100%">
-        <p align="center">
-          Comprehensive SEO audits and strategy development to improve search visibility and organic traffic.
-        </p>
-      </p>
-    </td>
-    <td width="50%">
-      <h3 align="center">WordPress Development</h3>
-      <p align="center">
-        <img src="https://via.placeholder.com/400x200" alt="WordPress Development" width="100%">
-        <p align="center">
-          Custom WordPress websites optimized for performance, user experience, and search engines.
-        </p>
-      </p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <h3 align="center">Content Optimization</h3>
-      <p align="center">
-        <img src="https://via.placeholder.com/400x200" alt="Content Optimization" width="100%">
-        <p align="center">
-          Strategic content creation and optimization to target valuable keywords and engage your audience.
-        </p>
-      </p>
-    </td>
-    <td width="50%">
-      <h3 align="center">Digital Marketing</h3>
-      <p align="center">
-        <img src="https://via.placeholder.com/400x200" alt="Digital Marketing" width="100%">
-        <p align="center">
-          Integrated digital marketing campaigns including SEO, social media, and paid advertising.
-        </p>
-      </p>
-    </td>
-  </tr>
-</table>
+---
 
-## 📈 My SEO Process
+# 🛠 Tech Stack
 
-1. **Comprehensive Audit** - Analyzing technical issues, content gaps, and competitor strategies
-2. **Keyword Research & Strategy** - Identifying high-value opportunities and search intent
-3. **On-Page Optimization** - Implementing best practices for content, metadata, and structure
-4. **Technical SEO** - Ensuring your site is properly indexed and crawlable
-5. **Link Building & Authority** - Developing quality backlinks to boost domain authority
-6. **Performance Tracking** - Monitoring rankings, traffic, and conversions
+### Languages
 
-## 🎓 Education & Certifications
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js)
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python)
+![PHP](https://img.shields.io/badge/PHP-777BB4?style=flat-square&logo=php)
 
-- **Diploma in Computer Science & Engineering**  
-  Prince Institute of Innovative Technology (2016-2019)
-  
-- **Google Digital Unlocked**  
-  Fundamentals of Digital Marketing  
-  Credential ID: 9CW 7VE 29R
+### Frontend
 
-## 📊 SEO Success Metrics
+- Next.js
+- React
+- Tailwind CSS
+- HTML5
+- CSS3
 
-- 🚀 **Organic Traffic Growth**: Consistent month-over-month improvements
-- 🎯 **Keyword Rankings**: First page positions for competitive terms
-- 💼 **Lead Generation**: Increased conversion rates from organic search
-- 🔗 **Domain Authority**: Strategic backlink acquisition for long-term success
+### Backend
 
-## 🤝 Let's Connect!
+- Express
+- REST APIs
+- Supabase
+- PostgreSQL
+- Cloudflare Workers
+- Vercel
 
-I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. Feel free to reach out if you'd like to collaborate!
+### SEO & Analytics
 
-[![Website Badge](https://img.shields.io/badge/Website-MADS%20SOLUTIONS-blue?style=for-the-badge)](https://madssolutions.com)
+- Google Search Console
+- Ahrefs
+- SEMrush
+- Screaming Frog
+- Google Analytics
+
+---
+
+# 📦 Open Source Projects
+
+### 🇺🇸 Dam API SDK
+
+A modern TypeScript SDK for accessing United States dam data.
+
+Features
+
+- Real-time dam information
+- Reservoir statistics
+- Search by state
+- Historical data
+- Fully typed
+- Zero dependencies
+
+---
+
+### Government Data SDKs (In Progress)
+
+Building developer-friendly SDKs for:
+
+- NOAA
+- NASA
+- USGS
+- FEMA
+- Census Bureau
+- Bureau of Labor Statistics
+
+Goal:
+Make public government APIs easy to use.
+
+---
+
+### AI Automation
+
+Projects focused on:
+
+- AI Agents
+- Workflow Automation
+- Web Scraping
+- Data Processing
+- API Integrations
+
+---
+
+# 📈 GitHub Stats
+
+<p align="center">
+
+<img height="170" src="https://github-readme-stats.vercel.app/api?username=Kakahaja07&show_icons=true&theme=github_dark"/>
+
+<img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Kakahaja07&layout=compact&theme=github_dark"/>
+
+</p>
+
+<p align="center">
+
+<img src="https://streak-stats.demolab.com?user=Kakahaja07&theme=github-dark"/>
+
+</p>
+
+---
+
+# 🌱 Currently Working On
+
+- AI Automation Systems
+- TypeScript SDKs
+- Next.js SaaS Applications
+- Developer APIs
+- Open Source Packages
+
+---
+
+# 🎯 2026 Goals
+
+- Publish 25+ npm packages
+- Reach 1M+ npm downloads
+- Build 10+ production APIs
+- Contribute to major open-source projects
+- Help developers through better tooling
+
+---
+
+# 🤝 Let's Collaborate
+
+I'm interested in collaborating on:
+
+- Open Source
+- AI
+- Developer Tools
+- APIs
+- Automation
+- TypeScript Libraries
+
+---
+
+> "Build tools that save developers time."
