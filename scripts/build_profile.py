@@ -11,7 +11,7 @@ the script falls back to scripts/data.json so the README never breaks.
 
 Edit CONFIG below to change the README text, links or which repos show.
 """
-import base64, datetime as dt, html, json, os, re, sys, urllib.request
+import datetime as dt, html, json, os, re, sys, urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -20,8 +20,6 @@ DATA = Path(__file__).resolve().parent / "data.json"
 
 CONFIG = {
     "user": "Kakahaja07",
-    "name": "Prashant Sharma",
-    "location": "India",
     "greeting": "Howdy!",
     # Paragraphs for the README card. Wrap a phrase in [[...]] to underline it.
     "about": [
@@ -54,9 +52,17 @@ CONFIG = {
     "skip_repos": ["Kakahaja07"],
 }
 
-C = dict(card="#1a1a1b", card2="#242425", line="#2c2c2e", inner_line="#303033", fg="#ededed",
-         body="#c9c9cc", muted="#9b9b9f", faint="#6c6c70",
-         g=["#262628", "#0e4429", "#006d32", "#26a641", "#39d353"])
+THEMES = {
+    "dark": dict(card="#1a1a1b", card2="#242425", line="#2c2c2e", inner_line="#303033", fg="#ededed",
+                 body="#c9c9cc", muted="#9b9b9f", faint="#6c6c70", mute2="#bdbdc0", link="#d4d4d7",
+                 pill_fg="#c3c3c6", pill_line="#57575b", beta_fg="#cfcfd2", tier_bg="#e8e8e8", tier_fg="#111",
+                 g=["#262628", "#0e4429", "#006d32", "#26a641", "#39d353"]),
+    "light": dict(card="#f6f8fa", card2="#ffffff", line="#d0d7de", inner_line="#d8dee4", fg="#1f2328",
+                  body="#3d444d", muted="#59636e", faint="#6e7781", mute2="#59636e", link="#1f2328",
+                  pill_fg="#3d444d", pill_line="#afb8c1", beta_fg="#3d444d", tier_bg="#1f2328", tier_fg="#ffffff",
+                  g=["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"]),
+}
+C = dict(THEMES["dark"])   # active palette; main() swaps it per theme
 SANS = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif"
 MONO = "ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,monospace"
 LANG_COLORS = {"TypeScript": "#3178c6", "JavaScript": "#f1e05a", "Python": "#3572A5", "PHP": "#4F5D95",
@@ -112,11 +118,6 @@ def fetch_live(user):
             d["contributions"] = scrape_calendar(user)
         except Exception as ex2:
             print("contributions: using cached data ->", ex2)
-    try:
-        img = http(f"https://github.com/{user}.png?size=420", raw=True)
-        d["avatar_b64"] = base64.b64encode(img).decode()
-    except Exception as ex:
-        print("avatar: using cached/monogram ->", ex)
     return d
 
 
@@ -146,7 +147,7 @@ def load_data(offline):
     try:
         live = fetch_live(CONFIG["user"])
         merged = {**cached, **live}
-        DATA.write_text(json.dumps({k: v for k, v in merged.items() if k != "avatar_b64"}, indent=1))
+        DATA.write_text(json.dumps(merged, indent=1))
         return merged
     except Exception as ex:
         print("live fetch failed, using cached data ->", ex)
@@ -196,37 +197,17 @@ def rel_time(iso):
 
 # ---------------------------------------------------------------- cards
 def build_hero(d):
-    W, H, LW = 1000, 360, 250
-    defs = (f'<clipPath id="av"><rect x="1" y="1" width="{LW-2}" height="{H-2}" rx="15"/></clipPath>'
-            '<radialGradient id="avbg" cx="30%" cy="20%" r="95%"><stop offset="0" stop-color="#2f3a33"/>'
-            '<stop offset=".55" stop-color="#161917"/><stop offset="1" stop-color="#0f100f"/></radialGradient>'
-            '<linearGradient id="mono" x1="0" y1="0" x2=".6" y2="1"><stop offset="0" stop-color="#f3f7f4"/>'
-            '<stop offset="1" stop-color="#8fd3a0"/></linearGradient>'
-            '<linearGradient id="cap" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/>'
-            '<stop offset="1" stop-color="#000" stop-opacity=".85"/></linearGradient>')
-    b = [f'<rect x="0" y="0" width="{LW}" height="{H}" rx="16" fill="url(#avbg)"/>']
-    if d.get("avatar_b64"):
-        b.append(f'<image clip-path="url(#av)" x="0" y="0" width="{LW}" height="{H}" preserveAspectRatio="xMidYMid slice" '
-                 f'href="data:image/png;base64,{d["avatar_b64"]}"/>')
-    else:
-        initials = "".join(p[0] for p in CONFIG["name"].split()[:2])
-        b.append(text(LW/2, H/2 + 4, e(initials), 92, "url(#mono)", 700, anchor="middle", extra='dominant-baseline="middle" letter-spacing="-3"'))
-    b.append(f'<rect clip-path="url(#av)" x="0" y="{H-96}" width="{LW}" height="96" fill="url(#cap)"/>')
-    b.append(text(18, H - 38, e(CONFIG["name"]), 16, weight=600))
-    b.append(text(18, H - 18, e(f'@{CONFIG["user"]} · {CONFIG["location"]}'), 11.5, "#b9b9bd", family=MONO))
-    b.append(f'<rect x=".5" y=".5" width="{LW-1}" height="{H-1}" rx="16" fill="none" stroke="{C["line"]}"/>')
-
-    X = LW + 16
-    b.append(card(X, 0, W - X, H))
-    b.append(text(X + 26, 40, e(f'{CONFIG["user"]} / README.md'), 11, C["faint"], family=MONO, extra='letter-spacing=".3"'))
-    b.append(text(X + 26, 84, e(CONFIG["greeting"]), 25, weight=600))
+    W, H = 1000, 280
+    b = [card(0, 0, W, H)]
+    b.append(text(26, 40, e(f'{CONFIG["user"]} / README.md'), 11, C["faint"], family=MONO, extra='letter-spacing=".3"'))
+    b.append(text(26, 84, e(CONFIG["greeting"]), 25, weight=600))
     paras = "".join(
         '<p style="margin:0 0 12px">' +
         e(p).replace("[[", f'<span style="color:{C["fg"]};text-decoration:underline;text-decoration-color:{C["faint"]}">').replace("]]", "</span>") +
         "</p>" for p in CONFIG["about"])
-    b.append(html_block(X + 26, 104, W - X - 52, H - 120, paras,
+    b.append(html_block(26, 104, W - 52, H - 120, paras,
                         f"font-family:{SANS};font-size:14px;line-height:1.6;color:{C['body']}"))
-    return svg(W, H, "".join(b), defs)
+    return svg(W, H, "".join(b))
 
 
 def badge(cx, cy, r=27):
@@ -246,15 +227,15 @@ def build_activity(d):
         cx = 22 + 27 + i * 64
         b.append(badge(cx, 86))
         if a.get("tier"):
-            b.append(f'<rect x="{cx+8}" y="100" width="26" height="18" rx="9" fill="#e8e8e8" stroke="{C["card"]}" stroke-width="2"/>')
-            b.append(text(cx + 21, 113, e(a["tier"]), 10, "#111", 700, anchor="middle"))
+            b.append(f'<rect x="{cx+8}" y="100" width="26" height="18" rx="9" fill="{C["tier_bg"]}" stroke="{C["card"]}" stroke-width="2"/>')
+            b.append(text(cx + 21, 113, e(a["tier"]), 10, C["tier_fg"], 700, anchor="middle"))
     if len(CONFIG["achievements"]) == 1:
         b.append(text(22, 146, e(CONFIG["achievements"][0]["name"]), 12.5, C["muted"]))
     else:
         for i, a in enumerate(CONFIG["achievements"][:3]):
             b.append(text(22 + 27 + i * 64, 140, e(a["name"]), 10.5, C["muted"], anchor="middle"))
-    b.append(f'<rect x="22.5" y="{H-44}" width="36" height="17" rx="8.5" fill="none" stroke="#5a5a5e"/>')
-    b.append(text(40.5, H - 31.5, "Beta", 10.5, "#cfcfd2", anchor="middle"))
+    b.append(f'<rect x="22.5" y="{H-44}" width="36" height="17" rx="8.5" fill="none" stroke="{C["pill_line"]}"/>')
+    b.append(text(40.5, H - 31.5, "Beta", 10.5, C["beta_fg"], anchor="middle"))
     b.append(text(68, H - 31.5, "Co-authored commits", 11.5, C["faint"]))
 
     X = LW + 16
@@ -286,7 +267,7 @@ def build_activity(d):
                  f'fill="{C["g"][l]}"><title>{c} contributions on {day.day} {MONTHS[day.month-1]} {day.year}</title></rect>')
         if row == 0 and day.month != last_m:
             if last_m is not None or day.day <= 7:
-                b.append(text(f"{gx+col*step:.2f}", gy - 9, MONTHS[day.month - 1], 10.5, "#bdbdc0"))
+                b.append(text(f"{gx+col*step:.2f}", gy - 9, MONTHS[day.month - 1], 10.5, C["mute2"]))
             last_m = day.month
     ly = gy + 7 * step + 22
     b.append(text(gx, ly, e(f"{start.day} {MONTHS[start.month-1]} {start.year} – {end.day} {MONTHS[end.month-1]} {end.year}"), 11, C["faint"]))
@@ -310,8 +291,8 @@ def repo_card(r, x, y, w, h):
     name = e(r["name"])
     b.append(text(x + 40, y + 31, name, 15, weight=600))
     px = x + 40 + len(r["name"]) * 8.6 + 10
-    b.append(f'<rect x="{px:.1f}" y="{y+19.5}" width="46" height="17" rx="8.5" fill="none" stroke="#57575b"/>')
-    b.append(text(f"{px+23:.1f}", y + 32, "Public", 10.5, "#c3c3c6", anchor="middle"))
+    b.append(f'<rect x="{px:.1f}" y="{y+19.5}" width="46" height="17" rx="8.5" fill="none" stroke="{C["pill_line"]}"/>')
+    b.append(text(f"{px+23:.1f}", y + 32, "Public", 10.5, C["pill_fg"], anchor="middle"))
     b.append(html_block(x + 16, y + 46, w - 32, 44, e(r.get("description") or "No description yet."),
                         f"font-family:{SANS};font-size:12.5px;line-height:1.5;color:{C['muted']};"
                         "display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden"))
@@ -325,13 +306,13 @@ def repo_card(r, x, y, w, h):
     mx = x + 16
     if lang:
         b.append(f'<circle cx="{mx+5}" cy="{my-4}" r="5" fill="{LANG_COLORS.get(lang, "#8b8b8b")}"/>')
-        b.append(text(mx + 15, my, e(lang), 12, "#bdbdc0"))
+        b.append(text(mx + 15, my, e(lang), 12, C["mute2"]))
         mx += 15 + len(lang) * 7 + 16
-    b.append(icon("star", mx, my - 11, 13, "#bdbdc0"))
-    b.append(text(mx + 18, my, r.get("stargazers_count", 0), 12, "#bdbdc0"))
+    b.append(icon("star", mx, my - 11, 13, C["mute2"]))
+    b.append(text(mx + 18, my, r.get("stargazers_count", 0), 12, C["mute2"]))
     mx += 18 + len(str(r.get("stargazers_count", 0))) * 7 + 16
-    b.append(icon("fork", mx, my - 11, 13, "#bdbdc0"))
-    b.append(text(mx + 18, my, r.get("forks_count", 0), 12, "#bdbdc0"))
+    b.append(icon("fork", mx, my - 11, 13, C["mute2"]))
+    b.append(text(mx + 18, my, r.get("forks_count", 0), 12, C["mute2"]))
     b.append(text(x + w - 16, my, e(rel_time(r.get("pushed_at"))), 11.5, C["faint"], anchor="end"))
     return "".join(b)
 
@@ -352,7 +333,7 @@ def build_repos(d):
     for i, (ic, label) in enumerate(CONFIG["links"]):
         yy = 62 + i * 30
         b.append(icon(ic, X + 22, yy, 15))
-        b.append(text(X + 46, yy + 12, e(label), 13, "#d4d4d7"))
+        b.append(text(X + 46, yy + 12, e(label), 13, C["link"]))
     p = d.get("profile", {})
     b.append(f'<line x1="{X+22}" y1="{H-46}" x2="{W-22}" y2="{H-46}" stroke="{C["line"]}"/>')
     b.append(f'<text x="{X+22}" y="{H-22}" font-family="{SANS}" font-size="12" fill="{C["muted"]}">'
@@ -361,13 +342,13 @@ def build_repos(d):
     return svg(W, H, "".join(b))
 
 
-def build_buttons():
+def build_buttons(theme):
     out = {}
     for key, ic, label in CONFIG["buttons"]:
         w = int(46 + len(label) * 7.4)
         b = [card(0, 0, w, 34, C["card"], C["line"], 17), icon(ic, 16, 9.5, 15, C["muted"]),
-             text(38, 22, e(label), 12.5, "#d4d4d7")]
-        out[f"btn-{key}.svg"] = svg(w, 34, "".join(b))
+             text(38, 22, e(label), 12.5, C["link"])]
+        out[f"btn-{key}-{theme}.svg"] = svg(w, 34, "".join(b))
     return out
 
 
@@ -375,11 +356,15 @@ def main():
     offline = "--offline" in sys.argv
     d = load_data(offline)
     ASSETS.mkdir(exist_ok=True)
-    files = {"hero.svg": build_hero(d), "activity.svg": build_activity(d), "repos.svg": build_repos(d)}
-    files.update(build_buttons())
+    files = {}
+    for theme, palette in THEMES.items():
+        C.clear(); C.update(palette)
+        files.update({f"hero-{theme}.svg": build_hero(d), f"activity-{theme}.svg": build_activity(d),
+                      f"repos-{theme}.svg": build_repos(d)})
+        files.update(build_buttons(theme))
     for name, content in files.items():
         (ASSETS / name).write_text(content, encoding="utf-8")
-    print("wrote", ", ".join(files))
+    print("wrote", len(files), "files")
 
 
 if __name__ == "__main__":
