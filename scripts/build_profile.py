@@ -48,22 +48,24 @@ CONFIG = {
         ("x", "x", "@Prsnt50"),
         ("linkedin", "linkedin", "LinkedIn"),
     ],
+    # Three short blocks under the calendar: (title, text). About 90 characters each fits three lines.
+    "pillars": [
+        ("SEO", "Technical SEO for developer tools: fast Next.js pages, clean structure and docs that rank."),
+        ("Indie developer", "Independent builder of open-source SDKs and APIs. Small tools that save developers time."),
+        ("Build in public", "Sharing progress, wins and lessons as I go. Follow along on X at @Prsnt50."),
+    ],
     "repo_count": 2,          # how many latest public repos to show
     "skip_repos": ["Kakahaja07"],
 }
 
 THEMES = {
-    "dark": dict(id="d", card=("#212124", "#151516"), inner=("#2b2b2e", "#202022"), edge=("#4c4c54", "#27272b"),
-                 line="#2e2e32", fg="#f4f4f5", body="#c9c9cd", muted="#9b9ba0", faint="#76767c",
-                 mute2="#bdbdc2", link="#d9d9dc", pill_fg="#c9c9cc", pill_line="#5a5a60", beta_fg="#d2d2d5",
-                 tier_bg="#ececee", tier_fg="#111111",
-                 acc=("#4ade80", "#22d3ee", "#818cf8"), glow="#22d3ee", glow_op=".13",
+    "dark": dict(card="#1a1a1b", inner="#242425", line="#2e2e31", fg="#f2f2f3", body="#c9c9cd", muted="#9b9ba0",
+                 faint="#76767c", mute2="#bdbdc2", link="#d9d9dc", pill_fg="#c9c9cc", pill_line="#5a5a60",
+                 beta_fg="#d2d2d5", tier_bg="#ececee", tier_fg="#111111",
                  g=["#2a2a2d", "#0e4429", "#006d32", "#26a641", "#39d353"]),
-    "light": dict(id="l", card=("#ffffff", "#f1f4f8"), inner=("#ffffff", "#f6f8fa"), edge=("#b9c3cf", "#dbe1e8"),
-                  line="#d6dde4", fg="#1f2328", body="#3d444d", muted="#59636e", faint="#6e7781",
-                  mute2="#59636e", link="#1f2328", pill_fg="#3d444d", pill_line="#afb8c1", beta_fg="#3d444d",
-                  tier_bg="#1f2328", tier_fg="#ffffff",
-                  acc=("#16a34a", "#0891b2", "#6366f1"), glow="#0891b2", glow_op=".10",
+    "light": dict(card="#f6f8fa", inner="#ffffff", line="#d0d7de", fg="#1f2328", body="#3d444d", muted="#59636e",
+                  faint="#6e7781", mute2="#59636e", link="#1f2328", pill_fg="#3d444d", pill_line="#afb8c1",
+                  beta_fg="#3d444d", tier_bg="#1f2328", tier_fg="#ffffff",
                   g=["#e6eaee", "#9be9a8", "#40c463", "#30a14e", "#216e39"]),
 }
 C = dict(THEMES["dark"])   # active palette; main() swaps it per theme
@@ -160,7 +162,7 @@ def load_data(offline):
         return cached
 
 
-# ---------------------------------------------------------------- fonts, paint, helpers
+# ---------------------------------------------------------------- fonts and helpers
 FONTS_DIR = Path(__file__).resolve().parent / "fonts"
 FACES = {"uncut": ("Uncut Sans", "uncut-sans.woff2", "300 700"), "geomini": ("Geomini", "geomini.woff2", "200 800")}
 METRICS = json.loads((FONTS_DIR / "metrics.json").read_text(encoding="utf-8"))
@@ -185,38 +187,14 @@ def tw(s, size, face="uncut", weight=400):
     return sum(t.get(ch, 560) for ch in s) * size / 1000
 
 
-def grad(a, b, name, x2=1, y2=1):
-    return (f'<linearGradient id="{name}{C["id"]}" x1="0" y1="0" x2="{x2}" y2="{y2}">'
-            f'<stop offset="0" stop-color="{a}"/><stop offset="1" stop-color="{b}"/></linearGradient>')
-
-
-def paint_defs():
-    i, acc = C["id"], "".join(f'<stop offset="{o}" stop-color="{c}"/>' for o, c in zip((0, .55, 1), C["acc"]))
-    return (grad(*C["card"], "card") + grad(*C["inner"], "inner") + grad(*C["edge"], "edge")
-            + f'<linearGradient id="acc{i}" x1="0" y1="0" x2="1" y2="0">{acc}</linearGradient>'
-            + f'<linearGradient id="accv{i}" x1="0" y1="0" x2="0" y2="1">{acc}</linearGradient>'
-            + f'<radialGradient id="glow{i}" cx="1" cy="0" r="1"><stop offset="0" stop-color="{C["glow"]}" '
-              f'stop-opacity="{C["glow_op"]}"/><stop offset="1" stop-color="{C["glow"]}" stop-opacity="0"/></radialGradient>')
-
-
-ACC = lambda: f'url(#acc{C["id"]})'
-ACCV = lambda: f'url(#accv{C["id"]})'
-
-
-def svg(w, h, body, extra_defs="", fonts=("uncut", "geomini")):
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" '
-            f'width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img">'
-            f'<defs>{font_css(tuple(fonts))}{paint_defs()}{extra_defs}</defs>{body}</svg>\n')
+def svg(w, h, body, fonts=("uncut", "geomini")):
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img">'
+            f'<defs>{font_css(tuple(fonts))}</defs>{body}</svg>\n')
 
 
 def card(x, y, w, h, r=16, inner=False):
-    fill = f'url(#{"inner" if inner else "card"}{C["id"]})'
     return (f'<rect x="{x+.5}" y="{y+.5}" width="{w-1}" height="{h-1}" rx="{r}" '
-            f'fill="{fill}" stroke="url(#edge{C["id"]})"/>')
-
-
-def glow(x, y, w, h, r=16):
-    return f'<rect x="{x+.5}" y="{y+.5}" width="{w-1}" height="{h-1}" rx="{r}" fill="url(#glow{C["id"]})"/>'
+            f'fill="{C["inner" if inner else "card"]}" stroke="{C["line"]}"/>')
 
 
 def bar(x, y, w, h, fill, r=None):
@@ -255,9 +233,9 @@ def rel_time(iso):
 # ---------------------------------------------------------------- cards
 def build_hero(d):
     W, H = 1000, 300
-    b = [card(0, 0, W, H), glow(0, 0, W, H), bar(28, 0, 64, 3, ACC()),
+    b = [card(0, 0, W, H),
          text(28, 42, e(f'{CONFIG["user"]} / README.md'), 11, C["faint"], family=MONO, extra='letter-spacing=".3"'),
-         text(28, 90, e(CONFIG["greeting"]), 32, ACC(), 700, family=HEAD)]
+         text(28, 90, e(CONFIG["greeting"]), 32, C["fg"], 700, family=HEAD)]
     last = len(CONFIG["about"]) - 1
     paras = "".join(
         f'<p style="margin:0 0 {12 if i < last else 0}px">' +
@@ -270,34 +248,16 @@ def build_hero(d):
 
 
 def badge(cx, cy, r=30):
-    i, k = C["id"], r / 27
+    k = r / 27
     return (f'<g transform="translate({cx-27*k} {cy-27*k}) scale({k})">'
-            f'<circle cx="27" cy="27" r="29" fill="none" stroke="url(#acc{i})" stroke-width="1.6" stroke-opacity=".9"/>'
-            f'<circle cx="27" cy="27" r="26" fill="url(#bdg)"/>'
+            f'<circle cx="27" cy="27" r="26" fill="{C["g"][3]}"/>'
             '<circle cx="27" cy="27" r="21" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>'
             '<circle cx="21" cy="22" r="5.5" fill="#123d24"/><path d="M11.5 38c0-5.8 4.3-9.5 9.5-9.5s9.5 3.7 9.5 9.5z" fill="#123d24"/>'
             '<circle cx="33" cy="22" r="5.5" fill="#f6fbf7"/><path d="M23.5 38c0-5.8 4.3-9.5 9.5-9.5s9.5 3.7 9.5 9.5z" fill="#f6fbf7"/></g>')
 
 
-def calendar_stats(counts, start):
-    longest = run = 0
-    for c in counts:
-        run = run + 1 if c > 0 else 0
-        longest = max(longest, run)
-    i, current = len(counts) - 1, 0
-    if counts[i] == 0:                    # today may simply not have happened yet
-        i -= 1
-    while i >= 0 and counts[i] > 0:
-        current, i = current + 1, i - 1
-    top = max(range(len(counts)), key=lambda k: counts[k])
-    return dict(longest=longest, current=current, active=sum(c > 0 for c in counts),
-                busiest=counts[top], busiest_date=start + dt.timedelta(days=top))
-
-
 def build_activity(d):
-    W, H, LW = 1000, 290, 250
-    defs = ('<linearGradient id="bdg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7ee0a0"/>'
-            '<stop offset="1" stop-color="#2e9e5a"/></linearGradient>')
+    W, H, LW = 1000, 366, 250
     con = d["contributions"]
     counts, levels = con["counts"], con.get("levels")
     if not levels:
@@ -305,17 +265,15 @@ def build_activity(d):
     start = dt.date.fromisoformat(con["start"])
     end = start + dt.timedelta(days=len(counts) - 1)
     total = con.get("total", sum(counts))
-    st = calendar_stats(counts, start)
 
     # ---- left card: achievements + last 12 weeks
-    b = [card(0, 0, LW, H), glow(0, 0, LW, H), text(22, 38, "Achievements", 15, weight=700, family=HEAD)]
+    b = [card(0, 0, LW, H), text(22, 38, "Achievements", 15, weight=700, family=HEAD)]
     ach = CONFIG["achievements"][:3]
     for i, a in enumerate(ach):
         cx = 22 + 30 + i * 74
         b.append(badge(cx, 96))
         if a.get("tier"):
-            b.append(f'<rect x="{cx+10}" y="108" width="28" height="19" rx="9.5" fill="{C["tier_bg"]}" '
-                     f'stroke="url(#card{C["id"]})" stroke-width="2"/>')
+            b.append(f'<rect x="{cx+10}" y="108" width="28" height="19" rx="9.5" fill="{C["tier_bg"]}" stroke="{C["card"]}" stroke-width="2"/>')
             b.append(text(cx + 24, 121.5, e(a["tier"]), 10.5, C["tier_fg"], 700, anchor="middle"))
         if len(ach) > 1:
             b.append(text(cx, 146, e(a["name"]), 10.5, C["muted"], 500, anchor="middle"))
@@ -324,20 +282,21 @@ def build_activity(d):
     b.append(bar(22, 170, LW - 44, 1, C["line"], 0))
     weeks = [sum(counts[i:i + 7]) for i in range(max(0, len(counts) - 84), len(counts), 7)][-12:]
     peak = max(weeks) or 1
-    b.append(text(22, 194, "LAST 12 WEEKS", 10, C["faint"], 500, extra='letter-spacing="1"'))
+    base = H - 64
+    b.append(text(22, 196, "LAST 12 WEEKS", 10, C["faint"], 500, extra='letter-spacing="1"'))
     for i, v in enumerate(weeks):
-        h = max(3, 36 * v / peak)
-        b.append(bar(22 + i * 16.5, 242 - h, 11, h, ACCV(), 3))
+        h = max(3, 64 * v / peak)
+        b.append(bar(22 + i * 16.5, base - h, 11, h, C["g"][3], 3))
     b.append(f'<rect x="22.5" y="{H-38}" width="36" height="18" rx="9" fill="none" stroke="{C["pill_line"]}"/>')
     b.append(text(40.5, H - 25.5, "Beta", 10.5, C["beta_fg"], 500, anchor="middle"))
     b.append(text(68, H - 25.5, "Co-authored commits", 11.5, C["faint"]))
 
-    # ---- right card: calendar + stats
+    # ---- right card: calendar + what I do
     X = LW + 16
     CW = W - X
-    b += [card(X, 0, CW, H), glow(X, 0, CW, H)]
+    b.append(card(X, 0, CW, H))
     num = f"{total:,}"
-    b.append(text(X + 24, 52, num, 32, ACC(), 700, family=HEAD))
+    b.append(text(X + 24, 52, num, 32, C["fg"], 700, family=HEAD))
     b.append(text(X + 24 + tw(num, 32, "geomini", 700) + 10, 52, "contributions in the last year", 15, C["muted"]))
     b.append(card(W - 24 - 92, 26, 92, 32, 10, inner=True))
     b.append(text(W - 24 - 78, 47, str(end.year), 13, C["fg"], 500))
@@ -369,18 +328,20 @@ def build_activity(d):
         b.append(f'<rect x="{lx+i*13}" y="{ly-9}" width="10" height="10" rx="2.5" fill="{C["g"][i]}"/>')
     b.append(text(lx + 5 * 13 + 3, ly, "More", 11, C["faint"]))
 
+    # three short blocks: what I do and how I work
     b.append(bar(X + 24, ly + 17, CW - 48, 1, C["line"], 0))
-    bd = st["busiest_date"]
-    stats = [("LONGEST STREAK", st["longest"], "days"), ("CURRENT STREAK", st["current"], "days"),
-             ("ACTIVE DAYS", st["active"], f"of {len(counts)}"), ("BUSIEST DAY", st["busiest"], f"on {bd.day} {MONTHS[bd.month-1]}")]
-    bw = (CW - 48) / 4
-    for i, (label, value, unit) in enumerate(stats):
-        sx, ty = X + 24 + i * bw, ly + 45
-        b.append(bar(sx, ty - 12, 3, 38, ACCV(), 1.5))
-        b.append(text(sx + 13, ty, label, 9.5, C["faint"], 500, extra='letter-spacing=".9"'))
-        b.append(f'<text x="{sx+13}" y="{ty+25}" font-family="{HEAD}" font-size="21" font-weight="700" fill="{C["fg"]}">'
-                 f'{value}<tspan font-family="{SANS}" font-size="12" font-weight="400" fill="{C["muted"]}" dx="5">{e(unit)}</tspan></text>')
-    return svg(W, H, "".join(b), defs)
+    y0, gap = ly + 17 + 26, 32
+    n = len(CONFIG["pillars"])
+    colw = (CW - 48 - gap * (n - 1)) / n
+    for i, (title, body) in enumerate(CONFIG["pillars"]):
+        cx = X + 24 + i * (colw + gap)
+        if i:
+            b.append(bar(cx - gap / 2, y0, 1, H - y0 - 28, C["line"], 0))
+        inner = (f'<div style="font-family:{HEAD};font-size:15px;font-weight:700;color:{C["fg"]};margin:0 0 7px">{e(title)}</div>'
+                 f'<div>{e(body)}</div>')
+        b.append(html_block(cx, y0 - 4, colw, H - y0 - 14, inner,
+                            f"font-family:{SANS};font-size:12.5px;line-height:1.55;color:{C['muted']}"))
+    return svg(W, H, "".join(b))
 
 
 def pick_repos(d):
@@ -391,7 +352,7 @@ def pick_repos(d):
 
 
 def repo_card(r, x, y, w, h):
-    b = [card(x, y, w, h, 12, inner=True), bar(x + 16, y, 40, 3, ACC()), icon("repo", x + 16, y + 20, 15, ACC())]
+    b = [card(x, y, w, h, 12, inner=True), icon("repo", x + 16, y + 20, 15)]
     b.append(text(x + 40, y + 33, e(r["name"]), 15, weight=700, family=HEAD))
     px = x + 40 + tw(r["name"], 15, "geomini", 700) + 10
     pw = tw("Public", 10.5, "uncut", 500) + 18
@@ -423,17 +384,17 @@ def repo_card(r, x, y, w, h):
 def build_repos(d):
     W, H, RW = 1000, 262, 250
     LW = W - RW - 16
-    b = [card(0, 0, LW, H), glow(0, 0, LW, H), text(24, 42, "Latest repositories", 19, weight=700, family=HEAD)]
+    b = [card(0, 0, LW, H), text(24, 42, "Latest repositories", 19, weight=700, family=HEAD)]
     reps = pick_repos(d)
     iw = (LW - 48 - 14) / 2
     for i, r in enumerate(reps):
         b.append(repo_card(r, 24 + i * (iw + 14), 64, iw, 174))
 
     X = LW + 16
-    b += [card(X, 0, RW, H), glow(X, 0, RW, H), text(X + 22, 38, "Find me", 15, weight=700, family=HEAD)]
+    b += [card(X, 0, RW, H), text(X + 22, 38, "Find me", 15, weight=700, family=HEAD)]
     for i, (ic, label) in enumerate(CONFIG["links"]):
         yy = 62 + i * 30
-        b.append(icon(ic, X + 22, yy, 15, ACC()))
+        b.append(icon(ic, X + 22, yy, 15))
         b.append(text(X + 46, yy + 12, e(label), 13, C["link"], 500))
     p = d.get("profile", {})
     b.append(bar(X + 22, H - 46, RW - 44, 1, C["line"], 0))
@@ -447,7 +408,7 @@ def build_buttons(theme):
     out = {}
     for key, ic, label in CONFIG["buttons"]:
         w = round(48 + tw(label, 12.5, "uncut", 500))
-        b = [card(0, 0, w, 34, 17), icon(ic, 16, 9.5, 15, ACC()), text(38, 22, e(label), 12.5, C["link"], 500)]
+        b = [card(0, 0, w, 34, 17), icon(ic, 16, 9.5, 15), text(38, 22, e(label), 12.5, C["link"], 500)]
         out[f"btn-{key}-{theme}.svg"] = svg(w, 34, "".join(b), fonts=("uncut",))
     return out
 
