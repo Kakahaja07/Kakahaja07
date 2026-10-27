@@ -1,6 +1,6 @@
 {
  "profile": {
-  "public_repos": 14,
+  "public_repos": 15,
   "followers": 2,
   "company": "Xtream Ventures",
   "blog": "https://hiprashant.com/",
@@ -13,8 +13,20 @@
    "language": "JavaScript",
    "stargazers_count": 6,
    "forks_count": 1,
-   "pushed_at": "2026-10-26T02:56:13Z",
+   "pushed_at": "2026-10-27T03:29:12Z",
    "homepage": "",
+   "fork": false,
+   "archived": false,
+   "private": false
+  },
+  {
+   "name": "xvision",
+   "description": "Free Chrome extension for X: follower counts, reach signals, best time to post and a calmer feed. Private, all data stays in your browser.",
+   "language": "HTML",
+   "stargazers_count": 1,
+   "forks_count": 0,
+   "pushed_at": "2026-10-26T11:08:33Z",
+   "homepage": "https://kakahaja07.github.io/xvision/",
    "fork": false,
    "archived": false,
    "private": false
@@ -25,7 +37,7 @@
    "language": "Python",
    "stargazers_count": 1,
    "forks_count": 0,
-   "pushed_at": "2026-10-25T04:53:02Z",
+   "pushed_at": "2026-10-26T04:57:07Z",
    "homepage": null,
    "fork": false,
    "archived": false,
@@ -177,7 +189,7 @@
   }
  ],
  "contributions": {
-  "total": 2904,
+  "total": 2924,
   "start": "2025-10-26",
   "counts": [
    8,
@@ -545,6 +557,7 @@
    16,
    5,
    5,
+   20,
    1
   ],
   "levels": [
@@ -913,6 +926,7 @@
    1,
    1,
    1,
+   2,
    1
   ]
  }
